@@ -14,7 +14,7 @@ PySastrawi==1.2.1   # Stemmer ID + kamus kata-dasar (basis cek KBBI, offline) �
 # Hapus tanda # jika MONGO_URL diisi di .env
 # motor tidak dipakai lagi — sudah pindah ke PyMongo Async API native (AsyncMongoClient)
 # butuh minimal pymongo>=4.9 (versi yang punya AsyncMongoClient) — tanpa pin biar auto-terbaru
-pymongo[srv]
+PyMongo
 # ── Requirements untuk fitur Userbot naik Obrolan Suara (VC) ────────────────
 # TIDAK memerlukan library tambahan — userbot naik VC via raw MTProto pyrogram.
 # Arsitektur baru: scheduled join tiap 30 menit (bukan keepalive permanen).
