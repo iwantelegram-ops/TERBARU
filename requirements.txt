@@ -1,0 +1,56 @@
+pyrofork==2.3.69
+tgcrypto
+py-tgcalls
+aiosqlite
+python-dotenv
+httpx
+rapidfuzz
+pytz
+dnspython
+Pillow>=10.0.0   # Kompresi gambar welcome grup (plugins/ui/handlers_welcome.py)
+PySastrawi==1.2.1   # Stemmer ID + kamus kata-dasar (basis cek KBBI, offline) — nexus/ai_core/kbbi_check.py
+
+# ── Wajib untuk MongoDB (Security OS + session userbot tersimpan di cloud) ────
+# Hapus tanda # jika MONGO_URL diisi di .env
+# motor tidak dipakai lagi — sudah pindah ke PyMongo Async API native (AsyncMongoClient)
+# butuh minimal pymongo>=4.9 (versi yang punya AsyncMongoClient) — tanpa pin biar auto-terbaru
+pymongo[srv]
+# ── Requirements untuk fitur Userbot naik Obrolan Suara (VC) ────────────────
+# TIDAK memerlukan library tambahan — userbot naik VC via raw MTProto pyrogram.
+# Arsitektur baru: scheduled join tiap 30 menit (bukan keepalive permanen).
+# Userbot join VC, scan peserta, mute/unmute, lalu dikick Telegram setelah ~30 detik.
+# Tidak ada masalah "naik-turun" karena memang terjadwal — bukan koneksi permanen.
+#
+# ── Custom Userbot (stay permanen di VC) — dependency TAMBAHAN ─────────────
+# Fitur Custom Userbot (login mandiri admin grup, stay permanen di VC) TIDAK
+# bisa pakai raw MTProto seperti di atas (auto-didepak Telegram). Butuh
+# stream audio sungguhan lewat pytgcalls (WebRTC asli). WAJIB kalau mau
+# pakai fitur ini:
+#   py-tgcalls          — pip install py-tgcalls (import name: pytgcalls)
+#   ffmpeg terpasang di SISTEM (bukan pip) — untuk decode file audio hening.
+#     Debian/Ubuntu: apt install -y ffmpeg
+# Kalau py-tgcalls TIDAK diinstall, Custom Userbot tetap bisa dipakai untuk
+# deteksi (mute/unmute/scan), TAPI tidak akan stay permanen di VC — lihat
+# security_os/vc_stream.py.
+#
+# CATATAN INSTALASI: py-tgcalls SEKARANG SUDAH dimasukkan sebagai baris
+# aktif di bagian atas file ini (ikut ke -r requirements.txt). ntgcalls
+# (dependency-nya) ~41MB — kalau instalasi di panel/host kehabisan ruang
+# temporer (/tmp) pip saat install batch, install manual terpisah sebagai
+# alternatif: `pip install py-tgcalls`.
+#
+# WAJIB (sudah ada di atas):
+#   pyrogram==2.0.106   — client Telegram MTProto
+#   TgCrypto            — enkripsi MTProto WAJIB
+#
+# CATATAN PENTING — TgCrypto:
+#   Tanpa TgCrypto, pyrogram menggunakan implementasi Python murni yang
+#   jauh lebih lambat dan TIDAK stabil untuk userbot yang aktif di banyak
+#   grup sekaligus. SELALU pastikan TgCrypto terinstall.
+#   Verifikasi: python -c "from pyrogram.crypto import aes; print('TgCrypto OK')"
+#
+# IZIN USERBOT DI GRUP (bukan package, tapi syarat wajib):
+#   Userbot HARUS menjadi ADMIN grup dengan izin:
+#     ✅ "Kelola Obrolan Video" (manage_video_chats)
+#   Tanpa izin ini, phone.EditGroupCallParticipant akan gagal dengan
+#   CHAT_ADMIN_REQUIRED atau GROUP_CALL_NOT_MODIFIED.
